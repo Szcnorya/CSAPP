@@ -31,3 +31,106 @@ maduiersnfotvbylSo you think you can stop the bomb with ctrl-c, do you?
 
 Phase 6:
 Input: six numbers
+
+int N[6];
+long long X[6];
+sscanf(s,"%d %d %d %d %d %d",N[0],N[1],N[2],N[3],N[4],N[5]);
+int i = 0;
+int* cur = N;
+while(True){
+	if(*cur-1>5 && *cur-1<0){
+		explode_bomb();
+	}
+	if(++i==6){
+		break;
+	}
+	int j = i;
+	while(j<=5){
+		if(*cur==N[j]){
+			explode_bomb();
+		}
+		j++;
+	}
+	cur+=4;
+}
+
+int *l = &N[6];
+int* cc = N;
+while(cc!=l){
+	*cc = 7-*cc;
+	cc += 4;
+}
+
+i = 0;
+int e,t;
+while(i!=24){
+	e = *(N+i);
+	if(e<=1){
+		t = 0x6032D0;
+	}
+	else{
+		int j=1;
+		t = 0x6032D0;
+		while(j!=e){
+			t = t+8;
+			j++;
+		}
+	}
+	*(X+2i) = t;
+	i+=4;
+}
+
+(gdb) x /12xg 0x6032d0
+0x6032d0 <node1>:	0x000000010000014c	0x00000000006032e0
+0x6032e0 <node2>:	0x00000002000000a8	0x00000000006032f0
+0x6032f0 <node3>:	0x000000030000039c	0x0000000000603300
+0x603300 <node4>:	0x00000004000002b3	0x0000000000603310
+0x603310 <node5>:	0x00000005000001dd	0x0000000000603320
+0x603320 <node6>:	0x00000006000001bb	0x0000000000000000
+
+(gdb) x /12dg 0x6032d0
+0x6032d0 <node1>:	4294967628	6304480
+0x6032e0 <node2>:	8589934760	6304496
+0x6032f0 <node3>:	12884902812	6304512
+0x603300 <node4>:	17179869875	6304528
+0x603310 <node5>:	21474836957	6304544
+0x603320 <node6>:	25769804219	0
+
+(gdb) x /24dw 0x6032d0
+0x6032d0 <node1>:	332	1	6304480	0
+0x6032e0 <node2>:	168	2	6304496	0
+0x6032f0 <node3>:	924	3	6304512	0
+0x603300 <node4>:	691	4	6304528	0
+0x603310 <node5>:	477	5	6304544	0
+0x603320 <node6>:	443	6	0	0
+
+node { val,id, node*}
+
+end = &X[6];
+cur = &X[1];
+c = X[0];
+long long k;
+while(True);
+{
+	k = *cur;
+	*(c+8) = k
+	cur += 8;
+	if(cur == end){
+		break;
+	}
+	c = k;
+}
+
+*(k+8) = 0;
+p = 0x0005;
+c = X[0]
+do
+{
+	cur = c+8;
+	cur = *cur;
+	if(*c<cur){
+		explode_bomb();
+	}
+	c = *c+8
+}
+while(--p!=0)

@@ -470,14 +470,15 @@ phase_6:
   40110b:	49 89 e6 	movq	%rsp, %r14
   40110e:	41 bc 00 00 00 00 	movl	$0, %r12d
   401114:	4c 89 ed 	movq	%r13, %rbp
-  # N[0] to %eax
+  # N[i] to %eax
   401117:	41 8b 45 00 	movl	(%r13), %eax
   40111b:	83 e8 01 	subl	$1, %eax
   40111e:	83 f8 05 	cmpl	$5, %eax
-  # N[0]<=6 safe
+  # 0<=N[i]<=6 safe
+  # jbe is unsigned
   401121:	76 05 	jbe	5 <phase_6+34>
   401123:	e8 12 03 00 00 	callq	786 <explode_bomb>
-  # %r12d = 0x01, start counter
+  # %r12d = 1-6 then break
   401128:	41 83 c4 01 	addl	$1, %r12d
   40112c:	41 83 fc 06 	cmpl	$6, %r12d
   401130:	74 21 	je	33 <phase_6+5F>
@@ -495,22 +496,20 @@ phase_6:
   40114b:	7e e8 	jle	-24 <phase_6+41>
   40114d:	49 83 c5 04 	addq	$4, %r13
   401151:	eb c1 	jmp	-63 <phase_6+20>
+
+
   # If %r12d == 6, assured that N[0]-N[5] are unique and <=6
   # goto here
   # len(N) = %rsi
   401153:	48 8d 74 24 18 	leaq	24(%rsp), %rsi
-  # %rax = &N[i]
   401158:	4c 89 f0 	movq	%r14, %rax
   40115b:	b9 07 00 00 00 	movl	$7, %ecx
   401160:	89 ca 	movl	%ecx, %edx
   401162:	2b 10 	subl	(%rax), %edx
-  # *N[i] = 7 - *N[i]
   401164:	89 10 	movl	%edx, (%rax)
-  # i = i+4
   401166:	48 83 c0 04 	addq	$4, %rax
   40116a:	48 39 f0 	cmpq	%rsi, %rax
   40116d:	75 f1 	jne	-15 <phase_6+6C>
-  #End above, counter %rsi = 0
 
   
   40116f:	be 00 00 00 00 	movl	$0, %esi
@@ -542,6 +541,7 @@ phase_6:
   4011b0:	48 8d 44 24 28 	leaq	40(%rsp), %rax
   4011b5:	48 8d 74 24 50 	leaq	80(%rsp), %rsi
   4011ba:	48 89 d9 	movq	%rbx, %rcx
+  # <phase_6+C9>
   4011bd:	48 8b 10 	movq	(%rax), %rdx
   4011c0:	48 89 51 08 	movq	%rdx, 8(%rcx)
   4011c4:	48 83 c0 08 	addq	$8, %rax
@@ -549,8 +549,10 @@ phase_6:
   4011cb:	74 05 	je	5 <phase_6+DE>
   4011cd:	48 89 d1 	movq	%rdx, %rcx
   4011d0:	eb eb 	jmp	-21 <phase_6+C9>
+
   4011d2:	48 c7 42 08 00 00 00 00 	movq	$0, 8(%rdx)
   4011da:	bd 05 00 00 00 	movl	$5, %ebp
+  # <phase_6+EB>
   4011df:	48 8b 43 08 	movq	8(%rbx), %rax
   4011e3:	8b 00 	movl	(%rax), %eax
   4011e5:	39 03 	cmpl	%eax, (%rbx)
